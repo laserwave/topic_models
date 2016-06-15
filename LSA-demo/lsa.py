@@ -38,7 +38,7 @@ for d in documents:
     words = d.split();
     for w in words:
         # 去标点
-        w = re.sub(punct_regex, '', w.lower())
+        w = re.sub(punctuation_regex, '', w.lower())
         if w in stopwords:
             continue
         elif w in dictionary:
