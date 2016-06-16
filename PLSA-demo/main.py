@@ -88,12 +88,12 @@ for word in dictionary.keys():
 # 初始化参数
 #==============================================================================
 
-# lamda[i, j] : p(zj|di)
-lamda = random([N, K])
+# lambda[i, j] : p(zj|di)
+lambda = random([N, K])
 for i in range(0, N):
-    normalization = sum(lamda[i, :])
+    normalization = sum(lambda[i, :])
     for j in range(0, K):
-        lamda[i, j] /= normalization;
+        lambda[i, j] /= normalization;
 
 # theta[i, j] : p(wj|zi)
 theta = random([K, M])
@@ -117,7 +117,7 @@ def EStep():
         for j in range(0, M):
             denominator = 0;
             for k in range(0, K):
-                p[i, j, k] = theta[k, j] * lamda[i, k];
+                p[i, j, k] = theta[k, j] * lambda[i, k];
                 denominator += p[i, j, k];
             if denominator == 0:
                 for k in range(0, K):
@@ -150,15 +150,15 @@ def MStep():
     # 更新参数lamda
     for i in range(0, N):
         for k in range(0, K):
-            lamda[i, k] = 0
+            lambda[i, k] = 0
             denominator = 0
             for j in range(0, M):
-                lamda[i, k] += X[i, j] * p[i, j, k]
+                lambda[i, k] += X[i, j] * p[i, j, k]
                 denominator += X[i, j];
             if denominator == 0:
-                lamda[i, k] = 1.0 / K
+                lambda[i, k] = 1.0 / K
             else:
-                lamda[i, k] /= denominator
+                lambda[i, k] /= denominator
 
 def LogLikelihood():
     loglikelihood = 0
@@ -166,7 +166,7 @@ def LogLikelihood():
         for j in range(0, M):
             tmp = 0
             for k in range(0, K):
-                tmp += theta[k, j] * lamda[i, k]
+                tmp += theta[k, j] * lambda[i, k]
             if tmp > 0:
                 loglikelihood += X[i, j] * log(tmp)
     print('loglikelihood : ', loglikelihood)
