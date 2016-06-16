@@ -1,13 +1,12 @@
-import numpy
-np = numpy
+import numpy as np
+from numpy import *
 from scipy import linalg
 from matplotlib import pyplot
 plt = pyplot
 from pylab import *
-from numpy import *
 import re
 
-# ÎÄµµ
+# æ–‡æ¡£
 documents =[
     "Roronoa Zoro, nicknamed \"Pirate Hunter\" Zoro, is a fictional character in the One Piece franchise created by Eiichiro Oda.",
     "In the story, Zoro is the first to join Monkey D. Luffy after he is saved from being executed at the Marine Base. ",
@@ -24,22 +23,22 @@ documents =[
     "After Arlong betrays her, and he and his gang are defeated by the Straw Hat Pirates, Nami joins the latter in pursuit of her dream."
 ]
 print(len(documents))
-# Í£ÓÃ´Ê
+# åœç”¨è¯
 stopwords = ['a','an', 'after', 'also', 'and', 'as', 'be', 'being', 'but', 'by', 'd', 'for', 'from', 'he', 'her', 'his', 'in', 'is', 'more', 'of', 'often', 'the', 'to', 'who', 'with', 'people']
-# ÒªÈ¥³ıµÄ±êµã·ûºÅµÄÕıÔò±í´ïÊ½
+# è¦å»é™¤çš„æ ‡ç‚¹ç¬¦å·çš„æ­£åˆ™è¡¨è¾¾å¼
 punctuation_regex = '[,.;"]+'
-# map,keyÊÇµ¥´Ê,valueÊÇµ¥´Ê³öÏÖµÄÎÄµµ±àºÅ
+# map,keyæ˜¯å•è¯,valueæ˜¯å•è¯å‡ºç°çš„æ–‡æ¡£ç¼–å·
 dictionary = {}
 
-# µ±Ç°´¦ÀíµÄÎÄµµ±àºÅ
+# å½“å‰å¤„ç†çš„æ–‡æ¡£ç¼–å·
 currentDocId = 0
 
-# ÒÀ´Î´¦ÀíÃ¿ÆªÎÄµµ
+# ä¾æ¬¡å¤„ç†æ¯ç¯‡æ–‡æ¡£
 for d in documents:
     words = d.split();
     for w in words:
-        # È¥±êµã
-        w = re.sub(punct_regex, '', w.lower())
+        # å»æ ‡ç‚¹
+        w = re.sub(punctuation_regex, '', w.lower())
         if w in stopwords:
             continue
         elif w in dictionary:
@@ -48,44 +47,44 @@ for d in documents:
             dictionary[w] = [currentDocId]
     currentDocId += 1
 
-# ÖÁÉÙ³öÏÖÔÚÁ½¸öÎÄµµÖĞµÄµ¥´ÊÑ¡Îª¹Ø¼ü´Ê
+# è‡³å°‘å‡ºç°åœ¨ä¸¤ä¸ªæ–‡æ¡£ä¸­çš„å•è¯é€‰ä¸ºå…³é”®è¯
 keywords = [k for k in dictionary.keys() if len(dictionary[k]) > 1]
 keywords.sort()
 print("keywords:\n", keywords, "\n")
 
-# Éú³Éword-document¾ØÕó
+# ç”Ÿæˆword-documentçŸ©é˜µ
 X = np.zeros([len(keywords), currentDocId])
 for i, k in enumerate(keywords):
     for d in dictionary[k]:
         X[i,d] += 1
 
 
-# ÆæÒìÖµ·Ö½â
+# å¥‡å¼‚å€¼åˆ†è§£
 U,sigma,V = linalg.svd(X, full_matrices=True)
    
 print("U:\n", U, "\n")
 print("SIGMA:\n", sigma, "\n")
 print("V:\n", V, "\n")
 
-# µÃµ½½µÎ¬(½µµ½targetDimensionÎ¬)ºóµ¥´ÊÓëÎÄµµµÄ×ø±ê±íÊ¾
+# å¾—åˆ°é™ç»´(é™åˆ°targetDimensionç»´)åå•è¯ä¸æ–‡æ¡£çš„åæ ‡è¡¨ç¤º
 targetDimension = 2
 U2 = U[0:, 0:targetDimension]
 V2 = V[0:targetDimension, 0:]
 sigma2 = np.diag(sigma[0:targetDimension])
 print(U2.shape, sigma2.shape, V2.shape)
 
-# ¶Ô±ÈÔ­Ê¼¾ØÕóÓë½µÎ¬½á¹û
+# å¯¹æ¯”åŸå§‹çŸ©é˜µä¸é™ç»´ç»“æœ
 X2 = np.dot(np.dot(U2, sigma2), V2);
 print("X:\n", X);
 print("X2:\n", X2);
 
-# ¿ªÊ¼»­Í¼
+# å¼€å§‹ç”»å›¾
 plt.title("LSA")
 plt.xlabel(u'x')
 plt.ylabel(u'y')
 
-# »æÖÆµ¥´Ê±íÊ¾µÄµã
-# U2µÄÃ¿Ò»ĞĞ°üº¬ÁËÃ¿¸öµ¥´ÊµÄ×ø±ê±íÊ¾(Î¬¶ÈÊÇtargetDimension)£¬´Ë´¦Ê¹ÓÃÇ°Á½¸öÎ¬¶ÈµÄ×ø±ê»­Í¼
+# ç»˜åˆ¶å•è¯è¡¨ç¤ºçš„ç‚¹
+# U2çš„æ¯ä¸€è¡ŒåŒ…å«äº†æ¯ä¸ªå•è¯çš„åæ ‡è¡¨ç¤º(ç»´åº¦æ˜¯targetDimension)ï¼Œæ­¤å¤„ä½¿ç”¨å‰ä¸¤ä¸ªç»´åº¦çš„åæ ‡ç”»å›¾
 for i in range(len(U2)):
     text(U2[i][0], U2[i][1],  keywords[i], fontsize=10)
     print("(", U2[i][0], ",", U2[i][1], ")", keywords[i])
@@ -93,10 +92,10 @@ x = U2.T[0]
 y = U2.T[1]
 plot(x, y, '.')
 
-# »æÖÆÎÄµµ±íÊ¾µÄµã
-# V2µÄÃ¿Ò»ÁĞ°üº¬ÁËÃ¿¸öÎÄµµµÄ×ø±ê±íÊ¾(Î¬¶ÈÊÇtargetDimension)£¬´Ë´¦Ê¹ÓÃÇ°Á½¸öÎ¬¶ÈµÄ×ø±ê»­Í¼
+# ç»˜åˆ¶æ–‡æ¡£è¡¨ç¤ºçš„ç‚¹
+# V2çš„æ¯ä¸€åˆ—åŒ…å«äº†æ¯ä¸ªæ–‡æ¡£çš„åæ ‡è¡¨ç¤º(ç»´åº¦æ˜¯targetDimension)ï¼Œæ­¤å¤„ä½¿ç”¨å‰ä¸¤ä¸ªç»´åº¦çš„åæ ‡ç”»å›¾
 for i in range(len(V2[0])):
-    text(V2[0][i], V2[1][i], docText[i], fontsize=10)
+    text(V2[0][i], V2[1][i], ('D%d' %(i+1)), fontsize=10)
     print("(", V2[0][i], ",", V2[1][i], ")", ('D%d' %(i+1)))
 x = V[0]
 y = V[1]
