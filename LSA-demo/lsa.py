@@ -1,10 +1,8 @@
 import numpy as np
-from numpy import *
+import pylab
+import re
 from scipy import linalg
 from matplotlib import pyplot
-plt = pyplot
-from pylab import *
-import re
 
 # 文档
 documents =[
@@ -79,27 +77,27 @@ print("X:\n", X);
 print("X2:\n", X2);
 
 # 开始画图
-plt.title("LSA")
-plt.xlabel(u'x')
-plt.ylabel(u'y')
+pyplot.title("LSA")
+pyplot.xlabel(u'x')
+pyplot.ylabel(u'y')
 
 # 绘制单词表示的点
 # U2的每一行包含了每个单词的坐标表示(维度是targetDimension)，此处使用前两个维度的坐标画图
 for i in range(len(U2)):
-    text(U2[i][0], U2[i][1],  keywords[i], fontsize=10)
+    pylab.text(U2[i][0], U2[i][1],  keywords[i], fontsize=10)
     print("(", U2[i][0], ",", U2[i][1], ")", keywords[i])
 x = U2.T[0]
 y = U2.T[1]
-plot(x, y, '.')
+pylab.plot(x, y, '.')
 
 # 绘制文档表示的点
 # V2的每一列包含了每个文档的坐标表示(维度是targetDimension)，此处使用前两个维度的坐标画图
 for i in range(len(V2[0])):
-    text(V2[0][i], V2[1][i], ('D%d' %(i+1)), fontsize=10)
+    pylab.text(V2[0][i], V2[1][i], ('D%d' %(i+1)), fontsize=10)
     print("(", V2[0][i], ",", V2[1][i], ")", ('D%d' %(i+1)))
 x = V[0]
 y = V[1]
-plot(x, y, 'x')
+pylab.plot(x, y, 'x')
 
 
-savefig("D:/1.png", dpi=100)
+pylab.savefig("D:/1.png", dpi=100)
