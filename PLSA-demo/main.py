@@ -182,26 +182,14 @@ for i in range(0, 20):
     LogLikelihood()
 
 
+#==============================================================================
+# get top words of each topic
+#==============================================================================
 topicwords = []
 maxTopicWordsNum = 10
 for i in range(0, K):
     topicword = []
-    for j in range(0, maxTopicWordsNum):
-        maxValue = max(theta[i, :])
-        index = -1
-        for k in range(0, M):
-            if theta[i, k] == maxValue:
-                theta[i, k] -= 1
-                index = k
-                break;
-        if theta[i, index] > -1:
-            topicword.append(dictionaryReverse[index])
-        else:
-            break
-    topicwords.append(topicword)
-
-for i in range(0, K):
-    for j in range(0, M):
-        if theta[i, j] < 0:
-            theta[i, j] += 1;
-
+    ids = theta[i, :].argsort()
+    for j in ids:
+        topicword.insert(0, dictionaryReverse[j])
+    topicwords.append(topicword[0:min(maxTopicWordsNum, len(topicword))])
