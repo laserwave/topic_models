@@ -31,4 +31,4 @@ Author
 
  * ZhikaiZhang 
  * Email <zhangzhikai@seu.edu.cn>
- * Blog <http://zhangzhikai.cn>
+ * Blog <http://zhikaizhang.cn>
