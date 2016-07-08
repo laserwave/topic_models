@@ -5,7 +5,7 @@ import jieba
 import re
 
 # 预处理(分词，去停用词，为每个word赋予一个编号，文档使用word编号的列表表示)
-def preprocessing(filename):
+def preprocessing():
     # 读取停止词文件
     file = codecs.open('stopwords.dic','r','utf-8')
     stopwords = [line.strip() for line in file] 
@@ -90,7 +90,7 @@ beta = 0.1
 iterationNum = 50
 Z = []
 K = 10
-docs, word2id, id2word = preprocessing("data.txt")
+docs, word2id, id2word = preprocessing()
 N = len(docs)
 M = len(word2id)
 ndz = np.zeros([N, K]) + alpha
